@@ -3,5 +3,16 @@ s2 = [b'/ZPA5ZE312.v10_022\r\n', b'\x02C.1.0(1020489587)\r\n', b'0.0.0(904106102
 s3 = [b'/ZPA5ZE312.v10_022\r\n', b'\x02C.1.0(1020489587)\r\n', b'0.0.0(9041061020489587)\r\n', b'0.3.0(10000*imp/kWh)\r\n', b'F.F(000000)\r\n', b'1.8.0(0000026.658*kWh)\r\n', b'1.8.1(0000008.993*kWh)\r\n', b'1.8.2(0000017.665*kWh)\r\n', b'21.8.0(0000005.422*kWh)\r\n', b'41.8.0(0000009.253*kWh)\r\n', b'61.8.0(0000011.987*kWh)\r\n', b'2.8.0(0000000.000*kWh)\r\n', b'22.8.0(0000000.000*kWh)\r\n', b'42.8.0(0000000.000*kWh)\r\n', b'62.8.0(0000000.000*kWh)\r\n', b'C.8.1(0000001557)\r\n', b'C.8.2(0000000858)\r\n', b'C.8.0(0000010053)\r\n', b'C.82.0(0000000000)\r\n', b'C.7.1(00000001)\r\n', b'C.7.2(00000000)\r\n', b'C.7.3(00000001)\r\n', b'0.2.1(ver.02, 100830, B526)\r\n', b'C.2.1(1312161349)\r\n', b'C.2.9(1312161349)\r\n', b'C.3.9(0000000000)\r\n', b'!\r\n', b'\x03k']
 
 s = s3
-for l in s:
-    print(l.decode('ascii').strip())
+
+#for l in s:
+#    print(l.decode('ascii').strip())
+
+import electro
+
+x = []
+
+print(electro.split_data_block(electro.join_listofbytes(s1)))
+print(electro.split_data_block(electro.join_listofbytes(s2)))
+print(electro.split_data_block(electro.join_listofbytes(s3)))
+
+print(electro.split_data_block(electro.join_listofbytes(x)))
