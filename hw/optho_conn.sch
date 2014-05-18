@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date So 17. květen 2014, 12:57:22 CEST
+EESchema Schematic File Version 2  date Ne 18. květen 2014, 11:46:12 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,13 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-EELAYER 43  0
+EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "17 may 2014"
+Date "18 may 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -43,6 +43,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Notes 1050 2550 0    60   ~ 0
+The schematic of the prototype (tested),\nexcept the diode was 5mm IR led unknown type.
 Text Notes 1000 1000 0    60   ~ 0
 TTL version:
 Text Label 1700 2400 0    60   ~ 0
