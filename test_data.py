@@ -16,3 +16,5 @@ print(electro.split_data_block(electro.join_listofbytes(s2)))
 print(electro.split_data_block(electro.join_listofbytes(s3)))
 
 print(electro.split_data_block(electro.join_listofbytes(x)))
+
+print(len(electro.split_data_block(electro.join_listofbytes(s1))[1]))
