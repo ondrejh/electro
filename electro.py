@@ -1,6 +1,7 @@
 import serial
 
 portname = '/dev/ttyUSB0'
+#portname = '/dev/ttyS0'
 request_string = '/?!\x0D\x0A'
 
 
@@ -60,6 +61,11 @@ def split_data_block(bytes_answer):
     return [bytes(ident).decode('ascii'),bytes(data).decode('ascii'),checksum_result]
 
 
+def set_rtsdtr_power(port):
+
+    port.setDTR(False) # -V
+    port.setRTS(True)  # +V
+
 def get_data_simple(portname):
 
     ''' simple function fetching data from tarif device
@@ -70,7 +76,10 @@ def get_data_simple(portname):
     sends the data request, reads the response and return it
     as the functions return value'''
     
-    with serial.Serial(port='/dev/ttyUSB0',baudrate=300,bytesize=7,parity=serial.PARITY_EVEN,stopbits=1,timeout=5) as port:
+    with serial.Serial(portname,baudrate=300,bytesize=7,parity=serial.PARITY_EVEN,stopbits=1,timeout=5) as port:
+
+        set_rtsdtr_power(port)
+        
         port.write(request_string.encode('ascii'))
         answ = port.readlines()
         return answ
@@ -84,7 +93,10 @@ def get_data(portname):
 
     the function returns all read data as the return value'''
     
-    with serial.Serial(port='/dev/ttyUSB0',baudrate=300,bytesize=7,parity=serial.PARITY_EVEN,stopbits=1,timeout=5) as port:
+    with serial.Serial(portname,baudrate=300,bytesize=7,parity=serial.PARITY_EVEN,stopbits=1,timeout=5) as port:
+
+        set_rtsdtr_power(port)
+        
         port.write(request_string.encode('ascii'))
         answ = []
 
