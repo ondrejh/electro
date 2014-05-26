@@ -106,7 +106,11 @@ def get_data(portname):
               if line[0]==ord('!'):
                   #end of data block
                   break
-              print(line.decode('ascii').strip())
+              if (line[0]==ord('/')) or (line[0]==b'\x02'):
+                  #print line without first char
+                  print(line[1:].decode('ascii').strip())
+              else:
+                  print(line.decode('ascii').strip())
 
         #read crc
         line = port.read(2)
