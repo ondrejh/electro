@@ -10,6 +10,10 @@ and table "logdata" with columns "id","tstamp","logdata".
 The module "pymysql" should be installed.
 (https://github.com/PyMySQL/PyMySQL).
 
+Raspberry Pi database install:
+
+sudo apt-get install mysql-server mysql-client
+
 More details about database setting:
 
 start mysql:
@@ -57,12 +61,13 @@ def main():
     cur = conn.cursor()
 
     ''' Get data from tariff device '''
-    try:
+    """try:
         answ = electro.get_data(portname)
         split_answ = electro.split_data_block(electro.join_listofbytes(answ))
         cur.execute('''insert into logdata (ident data checksum) values (split_answ[0],split_answ[1],split_answ[2]);''')
     except Exception as e:
-        cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))
+        cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))"""
+    cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))
 
     #close db
     cur.close()
