@@ -27,8 +27,8 @@ create database and jump in it:
 
 create tables:
 
-    mysql> create table error (id int, tstamp timestamp, errorstr text, PRIMARY KEY (id));
-    mysql> create table logdata (id int, tstamp timestamp, ident text, data text, checksum text, PRIMARY KEY (id));
+    mysql> create table error (tstamp timestamp, errorstr text);
+    mysql> create table logdata (tstamp timestamp, ident text, data text, checksum text);
 
 close mysql:
 
@@ -61,13 +61,12 @@ def main():
     cur = conn.cursor()
 
     ''' Get data from tariff device '''
-    """try:
+    try:
         answ = electro.get_data(portname)
         split_answ = electro.split_data_block(electro.join_listofbytes(answ))
-        cur.execute('''insert into logdata (ident data checksum) values (split_answ[0],split_answ[1],split_answ[2]);''')
+        cur.execute('''insert into {}.{} (ident,data,checksum) values ({},{},{});'''.format(db_name,db_logdatatable,split_answ[0],split_answ[1],split_answ[2]))
     except Exception as e:
-        cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))"""
-    cur.execute('''insert into {}.{} values ("ahoj errore")'''.format(db_name,db_errortable))
+        cur.execute('''insert into {}.{} (error) value ("{}")'''.format(db_name,db_errortable,str(e)))
 
     #close db
     cur.close()
