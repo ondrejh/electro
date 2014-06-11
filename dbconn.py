@@ -67,7 +67,7 @@ def main():
         cur.execute('''insert into logdata (ident data checksum) values (split_answ[0],split_answ[1],split_answ[2]);''')
     except Exception as e:
         cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))"""
-    cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))
+    cur.execute('''insert into logdata (error) values ("ahoj errore")''')
 
     #close db
     cur.close()
