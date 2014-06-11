@@ -64,7 +64,7 @@ def main():
     try:
         answ = electro.get_data(portname)
         split_answ = electro.split_data_block(electro.join_listofbytes(answ))
-        cur.execute('''insert into {}.{} (ident,data,checksum) values ({},{},{});'''.format(db_name,db_logdatatable,split_answ[0],split_answ[1],split_answ[2]))
+        cur.execute('''insert into {}.{} (ident,data,checksum) values ("{}","{}","{}");'''.format(db_name,db_logdatatable,split_answ[0],split_answ[1],split_answ[2]))
     except Exception as e:
         cur.execute('''insert into {}.{} (error) value ("{}")'''.format(db_name,db_errortable,str(e)))
 
