@@ -63,28 +63,6 @@ def main():
         cur.execute('''insert into logdata (ident data checksum) values (split_answ[0],split_answ[1],split_answ[2]);''')
     except Exception as e:
         cur.execute('''insert into logdata (error) values ("{}")'''.format(str(e)))
-    
-
-    #first write
-    cur.execute('''UPDATE {}.{} SET request='', status='STARTING', tstamp=current_timestamp;'''.format(db_name,db_table))
-
-    while True:
-
-        #read test table
-        cur.execute('SELECT * FROM {}.{}'.format(db_name,db_table))
-        testdb = cur.fetchall()[0]
-
-        #check if stop request .. if not, update timestamp
-        if testdb[0]=='STOP':
-            #say 'stopped' and break the loop
-            cur.execute('''UPDATE {}.{} SET request='', status='STOPPED';'''.format(db_name,db_table))
-            break
-        else:
-            #say 'running' and update timestamp
-            cur.execute('''UPDATE {}.{} SET status='RUNNING', tstamp=current_timestamp;'''.format(db_name,db_table))
-
-        #wait a while
-        sleep(5)
 
     #close db
     cur.close()
