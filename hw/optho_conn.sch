@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Ne 18. květen 2014, 11:46:12 CEST
+EESchema Schematic File Version 2  date St 11. červen 2014, 21:55:26 CEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -29,13 +29,14 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:optho_conn-cache
 EELAYER 25  0
 EELAYER END
 $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "18 may 2014"
+Date "11 jun 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -43,6 +44,8 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+Text Notes 1050 2800 0    60   ~ 0
+The second prototype asembly: R1 300R, R2 4k7, D1 L-53F3C, Q1 L-53P3C
 Text Notes 1050 2550 0    60   ~ 0
 The schematic of the prototype (tested),\nexcept the diode was 5mm IR led unknown type.
 Text Notes 1000 1000 0    60   ~ 0
