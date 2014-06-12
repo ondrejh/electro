@@ -62,7 +62,7 @@ def main():
 
     ''' Get data from tariff device '''
     try:
-        answ = electro.get_data(portname)
+        answ = electro.get_data_silent(portname)
         split_answ = electro.split_data_block(electro.join_listofbytes(answ))
         cur.execute('''insert into {}.{} (ident,data,checksum) values ("{}","{}","{}");'''.format(db_name,db_logdatatable,split_answ[0],split_answ[1],split_answ[2]))
     except Exception as e:

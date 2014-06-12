@@ -66,7 +66,7 @@ def set_rtsdtr_power(port):
     port.setDTR(False) # -V
     port.setRTS(True)  # +V
 
-def get_data_simple(portname):
+def get_data_silent(portname):
 
     ''' simple function fetching data from tarif device
     the disadvantage of this function is, it take almost 30s and it can't
@@ -106,6 +106,7 @@ def get_data(portname):
         if len(line)==0:
             #something's wrong (b'/...\r\n' expected)
             return answ
+        
         print(line.decode('ascii').strip())
 
         #read data
@@ -136,6 +137,6 @@ if __name__ == "__main__":
     answ = get_data(portname)
 
     '''#test 'get_data_simple' function
-    answ = get_data_simple(portname)
+    answ = get_data_silent(portname)
     for l in answ:
         print(l.decode('ascii').strip())'''
