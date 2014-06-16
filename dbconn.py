@@ -33,6 +33,13 @@ create tables:
 close mysql:
 
     exit
+
+
+using rpi cron table to run scrip every 5 minutes:
+
+sudo crontab -e
+
+add to the last line: */5 * * * * python3 /home/pi/electro/dbconn.py
     
 '''
 
