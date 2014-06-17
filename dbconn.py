@@ -10,11 +10,13 @@ and table "logdata" with columns "id","tstamp","logdata".
 The module "pymysql" should be installed.
 (https://github.com/PyMySQL/PyMySQL).
 
-Raspberry Pi database install:
+
+1) Raspberry Pi database install:
 
 sudo apt-get install mysql-server mysql-client
 
-More details about database setting:
+
+2) More details about database settings:
 
 start mysql:
 
@@ -35,11 +37,22 @@ close mysql:
     exit
 
 
-using rpi cron table to run scrip every 5 minutes:
+3) Install PyMySQL to rpi:
 
-sudo crontab -e
+... need to try again ...
 
-add to the last line: */5 * * * * python3 /home/pi/electro/dbconn.py
+
+4) Using rpi cron table to run scrip every 5 minutes:
+
+run crontab editor (root user):
+
+    sudo crontab -e
+
+insert into the last line:
+
+    */5 * * * * python3 /home/pi/electro/dbconn.py
+
+    CTRL+O to save, CTRL+X to exit
     
 '''
 
