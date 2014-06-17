@@ -89,7 +89,7 @@ def return_last_entry():
 
     ''' Get last entry timestamp '''
     cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
-    lts = cur.fetchall()
+    lts = cur.fetchall()[0]
     #cur.execute('''select * from {}.{} where tstamp = {}'''.format(db_name,db_logdatatable,lts))
     print(lts)
     print(type(lts))
