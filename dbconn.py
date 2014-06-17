@@ -59,7 +59,7 @@ db_name  = 'energy'
 db_errortable = 'error'
 db_logdatatable = 'logdata'
 
-def main():
+def make_new_entry():
 
     ''' Open table '''
     #connect to db
@@ -79,6 +79,18 @@ def main():
     cur.close()
     conn.close()
 
+def return_last_entry():
+
+    ''' Open table '''
+    #connect to db
+    conn = pymysql.connect(host=db_host,user=db_user,passwd=db_pass)
+    conn.autocommit(True)
+    cur = conn.cursor()
+
+    ''' Get last entry timestamp '''
+    lts = cur.execute('''select max(tstamp) from {}.{}''')
+    print(lts)
+
 #run main if this is stand alone module
 if __name__ == "__main__":
-    main()
+    make_new_entry()
