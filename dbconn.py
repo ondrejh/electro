@@ -88,7 +88,7 @@ def return_last_entry():
     cur = conn.cursor()
 
     ''' Get last entry timestamp '''
-    lts = cur.execute('''select max(tstamp) from {}.{}''')
+    lts = cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
     print(lts)
 
 #run main if this is stand alone module
