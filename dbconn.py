@@ -89,10 +89,10 @@ def return_last_entry():
 
     ''' Get last entry timestamp '''
     cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+    lts = cur.fetchall()[0][0]
+    cur.execute('''select * from {}.{} where tstamp = "{}"'''.format(db_name,db_logdatatable,lts))
     lts = cur.fetchall()[0]
-    #cur.execute('''select * from {}.{} where tstamp = {}'''.format(db_name,db_logdatatable,lts))
-    print(lts)
-    print(type(lts))
+    return(lts)
 
 #run main if this is stand alone module
 if __name__ == "__main__":
