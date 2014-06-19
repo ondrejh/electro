@@ -53,6 +53,17 @@ insert into the last line:
     */5 * * * * python3 /home/pi/electro/dbconn.py
 
     CTRL+O to save, CTRL+X to exit
+
+
+5) Backup and restore database:
+
+backup into file:
+
+    mysqldump -u root -p1234 --add-drop-database energy backup_file.sql
+
+restore from file:
+
+    mysql -u root -p1234 energy < backup_file.sql
     
 '''
 
@@ -60,6 +71,7 @@ insert into the last line:
 import pymysql
 from time import sleep
 import electro
+import datetime
 
 #tariff device settings
 portname = '/dev/ttyAMA0'
@@ -71,6 +83,7 @@ db_pass  = '1234'
 db_name  = 'energy'
 db_errortable = 'error'
 db_logdatatable = 'logdata'
+
 
 def make_new_entry():
 
@@ -104,8 +117,45 @@ def return_last_entry():
     cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
     lts = cur.fetchall()[0][0]
     cur.execute('''select * from {}.{} where tstamp = "{}"'''.format(db_name,db_logdatatable,lts))
-    lts = cur.fetchall()[0]
-    return(lts)
+    ret = cur.fetchall()[0]
+    return(ret)
+
+def return_data():
+
+    ''' Open table '''
+    #connect to db
+    conn = pymysql.connect(host=db_host,user=db_user,passwd=db_pass)
+    conn.autocommit(True)
+    cur = conn.cursor()
+
+    ''' Get last entry timestamp '''
+    cur.execute('''select * from {}.{}'''.format(db_name,db_logdatatable))
+    ret = cur.fetchall()
+    return(ret)
+
+def get_raw_data(entry):
+
+    ''' return [datetime,value] if one entry input
+    or list [[dtm0,val0],[dtm1,val1]..[dtmN,valN]] if more entries in list input '''
+
+    if type(entry[0])!=datetime.datetime:
+
+        #it's probably not an entry'
+        if type(entry[0][0])==datetime.datetime:
+            ret = []
+            for e in entry:
+                dtm = e[0]
+                kwh = electro.get_total_kwh(e[2])
+                ret.append([dtm,kwh])
+            return(ret)
+
+        #not even one entry or list of it
+        return([])
+
+    #one entry conversion
+    dtm = entry[0]
+    kwh = electro.get_total_kwh(entry[2])
+    return([dtm,kwh])
 
 #run main if this is stand alone module
 if __name__ == "__main__":
