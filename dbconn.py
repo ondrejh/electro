@@ -120,7 +120,7 @@ def return_last_entry():
     ret = cur.fetchall()[0]
     return(ret)
 
-def return_data():
+def return_data(begin=None,end=None,interval=None):
 
     ''' Open table '''
     #connect to db
@@ -128,8 +128,35 @@ def return_data():
     conn.autocommit(True)
     cur = conn.cursor()
 
-    ''' Get last entry timestamp '''
-    cur.execute('''select * from {}.{}'''.format(db_name,db_logdatatable))
+    tmax = None
+    tmin = None
+    
+    if end!=None:
+        tmax=end
+        if begin==None and interval!=None:
+            tmin=end-interval
+            
+    if begin!=None:
+        tmin=begin
+        if end==None and interval!=None:
+            tmax=begin+interval
+
+    if begin==None and end==None and interval!=None:
+            ''' get last time '''
+            cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+            lts = cur.fetchall()[0][0]
+            tmin = lts-interval
+
+    querry = '''select * from {}.{}'''.format(db_name,db_logdatatable)
+
+    if tmax!=None and tmin==None:
+        querry = querry+' where tstamp <= "{}"'.format(tmax)
+    elif tmax==None and tmin!=None:
+        querry = querry+' where tstamp >= "{}"'.format(tmin)
+    elif tmax!=None and tmin!=None:
+        querry = querry+' where tstamp >= "{}" and tstamp <= "{}"'.format(tmin,tmax)
+
+    cur.execute(querry)
     ret = cur.fetchall()
     return(ret)
 

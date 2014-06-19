@@ -40,8 +40,12 @@ if __name__ == "__main__":
     e = get_raw_data(return_last_entry())
     print_raw_entry(e)
 
-    #all data
-    data = get_raw_data(return_data())
+    # get data in specified time limits
+    data = get_raw_data(return_data(begin='2014-06-18 16:00:00',end='2014-06-18 17:30:00'))
+    # last hour and half data
+    #data = get_raw_data(return_data(interval=datetime.timedelta(0,3600*1.5,0)))
+    # all data
+    #data = get_raw_data(return_data())
     print('Data:')
     calculate_wattage(data)
     for e in data:
