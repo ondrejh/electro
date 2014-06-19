@@ -1,0 +1,22 @@
+Terminal type set to 'unknown'
+gnuplot> set xdata time
+gnuplot> set style data lines
+gnuplot> unset multiplot
+gnuplot> set title "Wattage over the last 24 hours"
+gnuplot> set term png
+Terminal type set to 'png'
+Options are 'nocrop font "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf,12" fontscale 1.0 size 640,480 '
+gnuplot> set timefmt "%Y-%m-%d %H:%M:%S"
+gnuplot> set format x "%H:%M"
+gnuplot> set xlabel "Time"
+gnuplot> set ylabel "Wattage"
+gnuplot> set autoscale y
+gnuplot> set autoscale x
+gnuplot> set output "dump.png"
+gnuplot> set datafile separator ";"
+gnuplot> plot "dump.txt"
+                        ^
+         Need full using spec for x time data
+
+gnuplot> plot "dump.txt" using 1:2 t "inbound" w lines
+
