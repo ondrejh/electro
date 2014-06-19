@@ -1,7 +1,8 @@
 import serial
 
-portname = '/dev/ttyUSB0'
+#portname = '/dev/ttyUSB0'
 #portname = '/dev/ttyS0'
+portname = '/dev/ttyAMA0'
 request_string = '/?!\x0D\x0A'
 
 
