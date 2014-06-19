@@ -2,7 +2,8 @@
 
 from dbconn import return_last_entry, return_data, get_raw_data
 
-import datetime
+from datetime import datetime, timedelta
+
 
 def print_raw_entry(entry):
 
@@ -40,10 +41,14 @@ if __name__ == "__main__":
     e = get_raw_data(return_last_entry())
     print_raw_entry(e)
 
-    # get data in specified time limits
-    data = get_raw_data(return_data(begin='2014-06-18 16:00:00',end='2014-06-18 17:30:00'))
-    # last hour and half data
-    #data = get_raw_data(return_data(interval=datetime.timedelta(0,3600*1.5,0)))
+    # get data to with interval
+    #data = get_raw_data(return_data(end=datetime(2014,6,19,19,0,0),interval=timedelta(0,3600*2,0)))
+    # get data from with interval
+    #data = get_raw_data(return_data(begin=datetime(2014,6,19,16,0,0),interval=timedelta(0,3600*3)))
+    # get data from to
+    #data = get_raw_data(return_data(begin='2014-06-18 16:00:00',end='2014-06-18 17:30:00'))
+    # get last data in interval
+    data = get_raw_data(return_data(interval=timedelta(0,3600*24,0)))
     # all data
     #data = get_raw_data(return_data())
     print('Data:')
@@ -52,3 +57,8 @@ if __name__ == "__main__":
         print_raw_entry(e)
         #print(e)
 
+    f = open('dump.txt','w')
+    f.write('# time; p[kw]\n')
+    for e in data[1:]:
+        f.write('{}; {:0.3f}\n'.format(e[0],e[2]))
+    f.close
