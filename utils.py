@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3
 
 from dbconn import last_entry_timestamp, first_entry_timestamp, return_data, get_raw_data
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     it creates last day wattage data file or if --all
     argument found it creates wattage datafiles form all data'''
 
-    workdir = '/root/electro/data/'
+    workdir = '/home/pi/energy_data/'
 
     files = []
 
