@@ -105,7 +105,7 @@ def make_new_entry():
     cur.close()
     conn.close()
 
-def return_last_entry():
+def last_entry_timestamp():
 
     ''' Open table '''
     #connect to db
@@ -116,9 +116,20 @@ def return_last_entry():
     ''' Get last entry timestamp '''
     cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
     lts = cur.fetchall()[0][0]
-    cur.execute('''select * from {}.{} where tstamp = "{}"'''.format(db_name,db_logdatatable,lts))
-    ret = cur.fetchall()[0]
-    return(ret)
+    return(lts)
+
+def first_entry_timestamp():
+
+    ''' Open table '''
+    #connect to db
+    conn = pymysql.connect(host=db_host,user=db_user,passwd=db_pass)
+    conn.autocommit(True)
+    cur = conn.cursor()
+
+    ''' Get last entry timestamp '''
+    cur.execute('''select min(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+    fts = cur.fetchall()[0][0]
+    return(fts)
 
 def return_data(begin=None,end=None,interval=None):
 
@@ -165,24 +176,29 @@ def get_raw_data(entry):
     ''' return [datetime,value] if one entry input
     or list [[dtm0,val0],[dtm1,val1]..[dtmN,valN]] if more entries in list input '''
 
-    if type(entry[0])!=datetime.datetime:
+    try:
 
-        #it's probably not an entry'
-        if type(entry[0][0])==datetime.datetime:
-            ret = []
-            for e in entry:
-                dtm = e[0]
-                kwh = electro.get_total_kwh(e[2])
-                ret.append([dtm,kwh])
-            return(ret)
+        if type(entry[0])!=datetime.datetime:
 
-        #not even one entry or list of it
-        return([])
+            #it's probably not an entry'
+            if type(entry[0][0])==datetime.datetime:
+                ret = []
+                for e in entry:
+                    dtm = e[0]
+                    kwh = electro.get_total_kwh(e[2])
+                    ret.append([dtm,kwh])
+                return(ret)
 
-    #one entry conversion
-    dtm = entry[0]
-    kwh = electro.get_total_kwh(entry[2])
-    return([dtm,kwh])
+            #not even one entry or list of it
+            return([])
+
+        #one entry conversion
+        dtm = entry[0]
+        kwh = electro.get_total_kwh(entry[2])
+        return([dtm,kwh])
+
+    except:
+        return None
 
 #run main if this is stand alone module
 if __name__ == "__main__":
