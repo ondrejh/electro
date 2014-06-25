@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/bin/python3
 
 ''' Program for reading data out of the tariff device and writing it into the database:
 
