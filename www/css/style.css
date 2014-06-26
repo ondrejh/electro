@@ -1,0 +1,132 @@
+/* ======================================================== */
+/* 	Author: Ondrej Hejda                                	*/
+/*	Date 	6.3.2013                                      	*/
+/* ======================================================== */
+
+
+body {
+	margin-left: auto;
+    margin-right: auto;
+	margin-top: 0;
+    width: 800px;
+	font-family: Verdana, Arial, sans-serif;
+    font-size: .8em;
+}
+
+p {
+	line-height: 17px;
+	margin: 11px 0 10px 0;
+	padding: 0px;
+}
+
+h1 {
+	color: #9f9f9f;
+	margin:0px;
+	padding:0px;
+	font-size: 21px;
+}
+
+h2 {
+	color: #9f9f9f;
+	margin:10px 0;
+	padding:0px;
+	font-size: 18px;
+}
+
+h3 {
+	color: #9f9f9f;
+	margin:0px;
+	padding:0px;
+	font-size: 15px;
+}
+
+a:link {
+	color: #9B0;
+}
+
+a:visited {
+	color: #4A7;
+}
+
+blockquote{
+	background: #F7FDE3;
+	color: #606060;
+	padding: 10px;
+}
+
+/**** Table ****/
+
+table{
+	border-collapse: collapse;
+	margin: 10px 25px
+}
+
+th, td{
+	border: none;
+	padding: 3px 10px 3px 10px;
+}
+
+tr{
+	background-color: #F3F3F3;
+}
+
+tr:nth-of-type(odd){
+	background-color: #DDD;
+}
+
+th{
+	background-color: #497;
+	color: #fff;
+}
+
+/**** Header ***/
+
+header {
+	width: 100%;
+	overflow:hidden;
+}
+
+header h1{
+	color: 		#EEE;
+	background: #4A7;
+	padding:	10px;
+	font-size: 	20px;
+	text-align:	center
+}
+
+/**** Content ***/
+
+section {
+	width: 800px;
+	float: left;
+}
+
+article {
+	display: block;
+	display: inline;
+}
+
+article ul {
+	padding: 15px 0 15px 35px;
+	margin:0;
+}
+
+article li {
+	margin-bottom:5px;
+}
+
+/* article figure */
+
+article img:full{
+	width: 100%;
+}
+
+article img:onefourth{
+	width: 22%;
+}
+
+article figcaption{
+	color: #9f9f9f;
+	text-align: right;
+}
+
