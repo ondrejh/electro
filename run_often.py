@@ -1,4 +1,4 @@
-#! /var/bin/python3
+#! /usr/bin/python3
 
 #local imports
 import config

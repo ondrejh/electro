@@ -4,4 +4,4 @@
 wdir = '/home/pi/energy_data/'
 
 # plot file directory
-pdir = '/var/www/energy/data/'
+pdir = '/var/www/energy_data/'
