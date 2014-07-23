@@ -51,6 +51,6 @@ if __name__ == '__main__':
     #test if plot directory exists
     if os.path.isdir(config.pdir):
 
-        #move all .png file into it
+        #move all .png files into it
 
         subprocess.call('mv -f {}*.png {}'.format(config.wdir,config.pdir),shell=True)
