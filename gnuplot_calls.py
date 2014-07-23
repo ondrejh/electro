@@ -15,13 +15,13 @@ def gnuplot_day_file(filename):
     d = datetime.date(int(dstamp[0:4]),int(dstamp[4:6]),int(dstamp[6:8]))
     d -= datetime.timedelta(days=1)
     dfilename = '{}/{:04}{:02}{:02}{}'.format(os.path.dirname(filename),d.year,d.month,d.day,os.path.basename(filename)[8:])
-    print(dfilename)
+    #print(dfilename)
     if os.path.isfile(dfilename):
-        print('{},{}'.format(dfilename,filename))
+        #print('{},{}'.format(dfilename,filename))
         dstamp2 = os.path.basename(dfilename).split('_')[0]
         scall = ('gnuplot -e "dstamp=\'{}\'" -e "pre_dstamp=\'{}\'" -e "workdir=\'{}\'" two_day_wattage.gp'.format(dstamp,dstamp2,config.wdir))
     else:
-        print('{}'.format(filename))
+        #print('{}'.format(filename))
         scall = ('gnuplot -e "datestamp=\'{}\'" -e "workdir=\'{}\'" one_day_wattage.gp'.format(dstamp,config.wdir))
     subprocess.call(scall,shell=True)
 
