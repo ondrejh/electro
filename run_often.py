@@ -4,7 +4,7 @@
 import config
 from utils import day_data_to_file, all_data_to_day_files
 import dbconn
-from gnuplot_calls import gnuplot_day_file
+import gnuplot_calls
 
 #standard imports
 import os
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         
         fname = day_data_to_file(config.wdir)
         subprocess.call('echo "{}" >> log.txt'.format(fname),shell=True)
-        gnuplot_day_file(fname)
+        gnuplot_calls.run()
 
     else:
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         fnames = all_data_to_day_files(config.wdir)
         print('Plot data into png files .. ',end='')
         for fname in fnames:
-            gnuplot_day_file(fname)
+            gnuplot_calls.gnuplot_day_file(fname)
         print('done')
 
 
