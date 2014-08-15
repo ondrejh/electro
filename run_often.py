@@ -15,6 +15,7 @@ import subprocess
 if __name__ == '__main__':
 
     #call dbconn to fetch data and store in into DB
+    #subprocess.call('echo "{}{}" >> log.txt'.format(config.wdir,fname),shell=True)
     dbconn.make_new_entry()
 
 
