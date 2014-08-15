@@ -58,12 +58,13 @@ blockquote{
 
 table{
 	border-collapse: collapse;
-	margin: 10px 25px
+	margin: 10px 25px;
+	width: 90%;
 }
 
 th, td{
 	border: none;
-	padding: 3px 10px 3px 10px;
+	padding: 3px 10px;
 }
 
 tr{
@@ -117,12 +118,37 @@ article li {
 
 /* article figure */
 
-article img:full{
-	width: 100%;
+img {
+	max-width:100%;
 }
 
-article img:onefourth{
-	width: 22%;
+figure {display:inline}
+figcaption {display:block}
+figure.left {
+	position:relative;
+	display:block;
+	float:left;
+	width:40%;
+	padding: 0 0 0 0;
+}
+figure.right {
+	position:relative;
+	display:block;
+	float:right;
+	width:40%;
+	padding: 0 0 0 0;
+}
+figure.center {
+	position:relative;
+	display:block;
+	float:left;
+	width:90%;
+	padding: 0 0 0 0;
+}
+
+.divider{
+    position:relative;
+	width:100%;
 }
 
 article figcaption{

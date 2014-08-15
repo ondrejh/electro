@@ -25,6 +25,26 @@ def gnuplot_day_file(filename):
         scall = ('gnuplot -e "datestamp=\'{}\'" -e "workdir=\'{}\'" one_day_wattage.gp'.format(dstamp,config.wdir))
     subprocess.call(scall,shell=True)
 
+def run():
+    #list data files in work directory
+    files = os.listdir(config.wdir)
+
+    #find highest index
+    last_data_file = None
+    for file in files:
+        if file[8:]=='_day_data.txt':
+            if last_data_file == None:
+                last_data_file = file
+            else:
+                if int(file[:8])>int(last_data_file[:8]):
+                    last_data_file = file
+
+    #plot it
+    if last_data_file!=None:
+        gnuplot_day_file('{}{}'.format(config.wdir,last_data_file))
+        #subprocess.call('mv -f {}*.png {}'.format(config.wdir,config.pdir),shell=True)
+    else:
+        print('No data file found!')
+
 if __name__ == '__main__':
-    gnuplot_day_file('{}20140623_day_data.txt'.format(config.wdir))
-    
+    run()
