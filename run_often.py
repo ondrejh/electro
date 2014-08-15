@@ -25,7 +25,7 @@ if __name__ == '__main__':
         #exists: last day data update only
         
         fname = day_data_to_file(config.wdir)
-        subprocess.call('echo "{}" >> log.txt'.format(fname),shell=True)
+        #subprocess.call('echo "{}" >> log.txt'.format(fname),shell=True)
         gnuplot_calls.run()
 
     else:

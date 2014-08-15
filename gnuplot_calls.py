@@ -19,10 +19,10 @@ def gnuplot_day_file(filename):
     if os.path.isfile(dfilename):
         #print('{},{}'.format(dfilename,filename))
         dstamp2 = os.path.basename(dfilename).split('_')[0]
-        scall = ('gnuplot -e "dstamp=\'{}\'" -e "pre_dstamp=\'{}\'" -e "workdir=\'{}\'" two_day_wattage.gp'.format(dstamp,dstamp2,config.wdir))
+        scall = ('gnuplot -e "dstamp=\'{}\'" -e "pre_dstamp=\'{}\'" -e "workdir=\'{}\'" {}two_day_wattage.gp'.format(dstamp,dstamp2,config.wdir,config.sdir))
     else:
         #print('{}'.format(filename))
-        scall = ('gnuplot -e "datestamp=\'{}\'" -e "workdir=\'{}\'" one_day_wattage.gp'.format(dstamp,config.wdir))
+        scall = ('gnuplot -e "datestamp=\'{}\'" -e "workdir=\'{}\'" {}one_day_wattage.gp'.format(dstamp,config.wdir,config.sdir))
     subprocess.call(scall,shell=True)
 
 def run():
