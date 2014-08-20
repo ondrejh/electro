@@ -7,6 +7,12 @@
 	<title>Spotřeba elektrické nergie</title>
 	<link rel="stylesheet" type="text/css" href="files/style.css" media="screen" />
 	<link rel="shortcut icon" href="files/energy.ico" />
+
+	<link rel="stylesheet" href="files/lightbox.css">
+
+	<script src="files/jquery-1.11.0.min.js"></script>
+	<script src="files/lightbox.js"></script>
+
 </head>
 
 <body>
@@ -18,13 +24,15 @@
 <img class="full" src="files/wattmeter.jpg" alt="ftipny obrazek">
 </header>
 
-<h2>Graf dnešní spotřeby elektrické energie</h2>
+<h2>Denní graf spotřeby elektrické energie</h2>
 <p>
 	<!-- graf spotreby -->
 
 	<figure class="center">
-		<a href="data/dummy.png"><img class="full" src="data/dummy.png" alt="graf spotřeby elektřiny"></a>
-		<figcaption>Graf spotřeby elektřiny</figcaption>
+		<a href="energy_data/dummy2.png" data-lightbox="roadtrip"></a>
+		<a href="energy_data/dummy1.png" data-lightbox="roadtrip"></a>
+		<a href="energy_data/dummy0.png" data-lightbox="roadtrip"><img class="full" src="energy_data/dummy0.png" alt="graf spotřeby elektřiny">
+		<figcaption>Graf spotřeby elektřiny (klikni pro galerii starších grafů)</figcaption></a>
 	</figure>
 
 	<!-- konec graf spotreby -->
