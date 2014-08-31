@@ -114,7 +114,7 @@ def last_entry_timestamp():
     cur = conn.cursor()
 
     ''' Get last entry timestamp '''
-    cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+    cur.execute('''select max(tstamp) from {}.{} where checksum="OK"'''.format(db_name,db_logdatatable))
     lts = cur.fetchall()[0][0]
     return(lts)
 
@@ -127,7 +127,7 @@ def first_entry_timestamp():
     cur = conn.cursor()
 
     ''' Get last entry timestamp '''
-    cur.execute('''select min(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+    cur.execute('''select min(tstamp) from {}.{} where checksum="OK"'''.format(db_name,db_logdatatable))
     fts = cur.fetchall()[0][0]
     return(fts)
 
@@ -154,18 +154,18 @@ def return_data(begin=None,end=None,interval=None):
 
     if begin==None and end==None and interval!=None:
             ''' get last time '''
-            cur.execute('''select max(tstamp) from {}.{}'''.format(db_name,db_logdatatable))
+            cur.execute('''select max(tstamp) from {}.{} where checksum="OK"'''.format(db_name,db_logdatatable))
             lts = cur.fetchall()[0][0]
             tmin = lts-interval
 
-    querry = '''select * from {}.{}'''.format(db_name,db_logdatatable)
+    querry = '''select * from {}.{} where checksum="OK"'''.format(db_name,db_logdatatable)
 
     if tmax!=None and tmin==None:
-        querry = querry+' where tstamp <= "{}"'.format(tmax)
+        querry = querry+' and tstamp <= "{}"'.format(tmax)
     elif tmax==None and tmin!=None:
-        querry = querry+' where tstamp >= "{}"'.format(tmin)
+        querry = querry+' and tstamp >= "{}"'.format(tmin)
     elif tmax!=None and tmin!=None:
-        querry = querry+' where tstamp >= "{}" and tstamp <= "{}"'.format(tmin,tmax)
+        querry = querry+' and tstamp >= "{}" and tstamp <= "{}"'.format(tmin,tmax)
 
     cur.execute(querry)
     ret = cur.fetchall()
