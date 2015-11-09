@@ -55,3 +55,4 @@ docs/_build/
 hw/*cache.lib
 hw/*.bak
 201*.*
+www/*~
