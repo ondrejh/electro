@@ -186,7 +186,8 @@ def get_raw_data(entry):
                 for e in entry:
                     dtm = e[0]
                     kwh = electro.get_total_kwh(e[2])
-                    ret.append([dtm,kwh])
+                    [t1_kwh,t2_kwh] = electro.get_tarif_kwh(e[2])
+                    ret.append([dtm,kwh,t1_kwh,t2_kwh])
                 return(ret)
 
             #not even one entry or list of it
@@ -195,7 +196,8 @@ def get_raw_data(entry):
         #one entry conversion
         dtm = entry[0]
         kwh = electro.get_total_kwh(entry[2])
-        return([dtm,kwh])
+        [t1_kwh,t2_kwh] = electro.get_tarif_kwh(e[2])
+        return([dtm,kwh,t1_kwh,t2_kwh])
 
     except:
         return None

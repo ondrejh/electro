@@ -14,6 +14,8 @@ STX = b'\x02'
 ETX = b'\x03'
 
 kwh_total_value_start_str = '1.8.0('
+kwh_tarif1_value_start_str = '1.8.1('
+kwh_tarif2_value_start_str = '1.8.2('
 kwh_value_end_str = '*kWh'
 
 
@@ -25,6 +27,17 @@ def get_total_kwh(data_str):
     kwh = kwh[:kwh.find(kwh_value_end_str)]
 
     return(float(kwh))
+
+
+def get_tarif_kwk(data_str):
+
+    ''' return tarif kwh values from input data '''
+    t1_kwh = data_str[(data_str.find(kwh_tarif1_value_start_str)+len(kwh_tarif1_value_start_str)):]
+    t1_kwh = kwh[:kwh.find(kwh_value_end_str)]
+    t2_kwh = data_str[(data_str.find(kwh_tarif2_value_start_str)+len(kwh_tarif2_value_start_str)):]
+    t2_kwh = kwh[:kwh.find(kwh_value_end_str)]
+
+    return([float(t1_kwh),float(t2_kwh)])
 
 
 def join_listofbytes(listof_bytes):

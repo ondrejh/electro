@@ -25,19 +25,29 @@ def calculate_wattage(data):
 
     last_kwh = None
     last_dtm = None
+    last_t1_kwh = None
+    last_t2_kwh = None
 
     try:
         for e in data:
             if last_kwh == None:
                 last_dtm = e[0]
                 last_kwh = e[1]
+                last_t1_kwh = e[2]
+                last_t2_kwh = e[3]
             else:
                 ddtm = e[0]-last_dtm
                 dkwh = e[1]-last_kwh
+                dt1kwh = e[2]-last_t1_kwh
+                dt2kwh = e[3]-last_t2_kwh
                 last_dtm = e[0]
                 last_kwh = e[1]
+                last_t1_kwh = e[2]
+                last_t2_kwh = e[3]
                 w = dkwh/(ddtm.total_seconds()/3600)
-                e.append(w)
+                wt1 = dt1kwh/(ddtm.total_seconds()/3600)
+                wt2 = dt1kwh/(ddtm.total_seconds()/3600)
+                e.append(w,wt1,wt2)
     except:
         pass
 
@@ -63,9 +73,9 @@ def day_data_to_file(workdir,day=None):
     if type(data)==list:
         fname = '{}{:04}{:02}{:02}_day_data.txt'.format(workdir,dt00.year,dt00.month,dt00.day)
         f = open(fname,'w')
-        f.write('# time; p[kw]\n')
+        f.write('# time; p[kw]; t1[kw]; t2[kw]\n')
         for e in data[1:]:
-            f.write('{:02}:{:02}; {:0.3f}\n'.format(e[0].hour,e[0].minute,e[2]))
+            f.write('{:02}:{:02}; {:0.3f}; {:0.3f}; {:0.3f}\n'.format(e[0].hour,e[0].minute,e[2],e[3],e[4]))
         f.close()
 
         return fname
