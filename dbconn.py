@@ -177,6 +177,7 @@ def get_raw_data(entry):
     or list [[dtm0,val0],[dtm1,val1]..[dtmN,valN]] if more entries in list input '''
 
     try:
+    #if True:
 
         if type(entry[0])!=datetime.datetime:
 

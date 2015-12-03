@@ -29,13 +29,13 @@ def get_total_kwh(data_str):
     return(float(kwh))
 
 
-def get_tarif_kwk(data_str):
+def get_tarif_kwh(data_str):
 
     ''' return tarif kwh values from input data '''
     t1_kwh = data_str[(data_str.find(kwh_tarif1_value_start_str)+len(kwh_tarif1_value_start_str)):]
-    t1_kwh = kwh[:kwh.find(kwh_value_end_str)]
+    t1_kwh = t1_kwh[:t1_kwh.find(kwh_value_end_str)]
     t2_kwh = data_str[(data_str.find(kwh_tarif2_value_start_str)+len(kwh_tarif2_value_start_str)):]
-    t2_kwh = kwh[:kwh.find(kwh_value_end_str)]
+    t2_kwh = t2_kwh[:t2_kwh.find(kwh_value_end_str)]
 
     return([float(t1_kwh),float(t2_kwh)])
 
