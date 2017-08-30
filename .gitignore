@@ -56,4 +56,9 @@ hw/*cache.lib
 hw/*.bak
 201*.*
 hw_usb/*bak
-www/*~
+www/*~hw_usb/usb_ir
+hw_usb/usb_ir.xml
+hw_usb/usb_ir.xml_nice
+hw_usb/usb_ir_nice.xml
+hw_usb/usb_ir.xml
+hw_usb/usb_ir
