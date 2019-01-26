@@ -24,7 +24,7 @@ def get_onoff(prompt):
             print("Invalid input please enter ON or OFF")
 
 
-class my_gpios(object):
+class MyGpios(object):
     def __init__(self):
 
         GPIO.setmode(GPIO.BCM)
@@ -80,7 +80,7 @@ def center_text(text, width=16, padd_char=' '):
 
 if __name__ == "__main__":
 
-    gpios = my_gpios()
+    gpios = MyGpios()
 
     myip = get_my_ip()
     print(myip)

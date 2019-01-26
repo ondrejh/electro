@@ -1,6 +1,9 @@
-from Adafruit_CharLCD import Adafruit_CharLCD
-from myutils import my_gpios, get_my_ip, Button, center_text
+#!/usr/bin/python3
+
 import datetime
+
+from lcd1602 import Adafruit_CharLCD as Lcd1602
+from myutils import MyGpios, Button, get_my_ip, center_text
 
 
 def ip_page():
@@ -25,7 +28,7 @@ def empty_page():
 
 class Page(object):
 
-    def __init__(self, refresh, period=1.0):
+    def __init__(self, refresh, period=None):
 
         self.refresh = refresh
         self.period = period
@@ -58,8 +61,8 @@ LIGHT_ON_TIME = 10.0  # seconds
 
 if __name__ == "__main__":
 
-    lcd = Adafruit_CharLCD()
-    ios = my_gpios()
+    lcd = Lcd1602()
+    ios = MyGpios()
 
     page_cnt = 0
     pages[page_cnt].refresh_if_needed()
