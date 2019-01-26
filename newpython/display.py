@@ -1,6 +1,5 @@
 from Adafruit_CharLCD import Adafruit_CharLCD
-from myutils import my_gpios, get_my_ip
-from time import sleep
+from myutils import my_gpios, get_my_ip, Button
 import datetime
 
 
@@ -12,7 +11,6 @@ def ip_page():
     ip = (' ' * bf) + ip + (' ' * af)
 
     return " My IP address: \n" + ip
-    #return " My IP address: \n 192.168.1.220  "
 
 
 def clock_page():
@@ -41,11 +39,14 @@ class Page(object):
 
     def refresh_if_needed(self):
 
+        if self.period is None:
+            return False
+        
         if (datetime.datetime.now() - self.refreshed).seconds > self.period:
             self.refresh_anyway()
             return True
-        else:
-            return False
+
+        return False
 
 
 pages = (Page(empty_page, period=120),
@@ -66,19 +67,24 @@ if __name__ == "__main__":
     light_on = True
     light_time = datetime.datetime.now()
 
-    while True:
-        buttons = ios.get_buttons()
+    button_set = Button(lambda x=1: ios.get_buttons(x))
+    button_left = Button(lambda x=2: ios.get_buttons(x))
+    button_right = Button(lambda x=3: ios.get_buttons(x))
 
-        if buttons[2]:
+    while True:
+        button_set.read()
+        button_left.read()
+        button_right.read()
+
+        if button_right.pressed:
             page_cnt += 1
-        elif buttons[1]:
+        elif button_left.pressed:
             page_cnt -= 1
-        elif buttons[0]:
+        elif button_set.pressed:
             if not light_on:
                 light_time = datetime.datetime.now()
                 ios.lcd_light(True)
                 light_on = True
-            pass
         else:
             if light_on:
                 if (datetime.datetime.now() - light_time).seconds >= LIGHT_ON_TIME:

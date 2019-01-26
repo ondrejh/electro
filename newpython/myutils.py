@@ -2,6 +2,7 @@
 
 from subprocess import Popen, PIPE
 import RPi.GPIO as GPIO
+import time
 
 LCD_LIGHT_OUTPUT = 18
 BUTTON_1_INPUT = 5
@@ -50,6 +51,25 @@ class my_gpios(object):
         btn3 = False if GPIO.input(BUTTON_3_INPUT) else True
 
         return (btn1, btn2, btn3)
+
+
+class Button(object):
+
+    def __init__(self, input):
+
+        self.input = input
+        self.output = self.input()
+        self.pressed = False
+
+    def read(self):
+
+        b = self.input()
+        if (not self.output) and b:
+            self.pressed = True
+        else:
+            self.pressed = False
+
+        self.output = b
 
 
 if __name__ == "__main__":
