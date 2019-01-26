@@ -2,7 +2,6 @@
 
 from subprocess import Popen, PIPE
 import RPi.GPIO as GPIO
-import time
 
 LCD_LIGHT_OUTPUT = 18
 BUTTON_1_INPUT = 5
@@ -70,6 +69,13 @@ class Button(object):
             self.pressed = False
 
         self.output = b
+
+
+def center_text(text, width=16, padd_char=' '):
+
+    af = (width - len(text)) // 2
+    bf = width - af - len(text)
+    return (padd_char * bf) + text + (padd_char * af)
 
 
 if __name__ == "__main__":

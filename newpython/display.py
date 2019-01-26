@@ -1,21 +1,21 @@
 from Adafruit_CharLCD import Adafruit_CharLCD
-from myutils import my_gpios, get_my_ip, Button
+from myutils import my_gpios, get_my_ip, Button, center_text
 import datetime
 
 
 def ip_page():
 
     ip = get_my_ip()
-    af = (16 - len(ip)) // 2
-    bf = 16 - len(ip) - af
-    ip = (' ' * bf) + ip + (' ' * af)
+    ip = center_text(ip)
 
     return " My IP address: \n" + ip
 
 
 def clock_page():
 
-    return "     Clock      \n    12:34:56    "
+    d = datetime.datetime.now()
+
+    return center_text(d.strftime("%a %d.%m.%Y")) + "\n" + center_text(d.strftime("%H:%M:%S"))
 
 
 def empty_page():
@@ -41,7 +41,7 @@ class Page(object):
 
         if self.period is None:
             return False
-        
+
         if (datetime.datetime.now() - self.refreshed).seconds > self.period:
             self.refresh_anyway()
             return True
@@ -49,9 +49,9 @@ class Page(object):
         return False
 
 
-pages = (Page(empty_page, period=120),
-         Page(clock_page, period=0.2),
-         Page(ip_page, period=10))
+pages = (Page(clock_page, period=0.2),
+         Page(ip_page, period=120),
+         Page(empty_page, period=None))
 
 LIGHT_ON_TIME = 10.0  # seconds
 
