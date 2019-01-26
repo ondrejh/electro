@@ -86,6 +86,8 @@ class Adafruit_CharLCD(object):
         self.displaymode = self.LCD_ENTRYLEFT | self.LCD_ENTRYSHIFTDECREMENT
         self.write4bits(self.LCD_ENTRYMODESET | self.displaymode)  # set the entry mode
 
+        self.numlines = 2 # default lines
+
         self.clear()
 
     def begin(self, cols, lines):
