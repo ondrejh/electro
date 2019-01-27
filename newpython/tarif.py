@@ -5,6 +5,7 @@ import serial  # pySerial installation: sudo pip3 install pySerial
 # portname = '/dev/ttyUSB0'
 # portname = '/dev/ttyS0'
 portname = '/dev/ttyAMA0'
+
 request_string = '/?!\x0D\x0A'
 
 # tariff device entry symbols
@@ -25,7 +26,8 @@ def get_total_kwh(data_str):
     return (float(kwh))
 
 
-def join_listofbytes(listof_bytes):
+# obsolete functions
+'''def join_listofbytes(listof_bytes):
     """ Join list of bytes returned by get_data function
     into one bytes block (return) """
 
@@ -36,10 +38,10 @@ def join_listofbytes(listof_bytes):
 
 
 def split_data_block(bytes_answer):
-    ''' Split bytes (one block) into ident and data block,
+    """ Split bytes (one block) into ident and data block,
     and checks checksum.
     
-    returns [string(ident), string(data), string(checksum)] '''
+    returns [string(ident), string(data), string(checksum)] """
 
     st = 0
     ident = []
@@ -72,7 +74,7 @@ def split_data_block(bytes_answer):
                     checksum_result = 'Error'
                 st += 1
 
-    return [bytes(ident).decode('ascii'), bytes(data).decode('ascii'), checksum_result]
+    return [bytes(ident).decode('ascii'), bytes(data).decode('ascii'), checksum_result]'''
 
 
 def set_rs232_power(port):
@@ -95,8 +97,14 @@ def get_data_silent(port_name, rs232_power=False):
             set_rs232_power(port)
 
         port.write(request_string.encode('ascii'))
-        answ = port.readlines()
-        return answ
+        raw_answer = port.readlines()
+        # concat to bytes chunk
+
+        raw_answer_in_one_piece = b''
+        for line in raw_answer:
+            raw_answer_in_one_piece += line
+
+        return raw_answer_in_one_piece
 
 
 def get_data(port_name, silent=False, rs232_power=False):
@@ -112,14 +120,14 @@ def get_data(port_name, silent=False, rs232_power=False):
             set_rs232_power(port)
 
         port.write(request_string.encode('ascii'))
-        answ = []
+        raw_answer = []
 
         # read tariff device information
         line = port.readline()
-        answ += [line]
+        raw_answer += [line]
         if len(line) == 0:
             # something's wrong (b'/...\r\n' expected)
-            return answ
+            return raw_answer
 
         if not silent:
             print(line.decode('ascii').strip())
@@ -127,10 +135,10 @@ def get_data(port_name, silent=False, rs232_power=False):
         # read data
         while True:
             line = port.readline()
-            answ += [line]
+            raw_answer += [line]
             if len(line) == 0:
                 # no answer .. wrong
-                return answ
+                return raw_answer
             if line[0] == ord('!'):
                 # end of data block
                 break
@@ -144,19 +152,56 @@ def get_data(port_name, silent=False, rs232_power=False):
 
         # read crc
         line = port.read(2)
-        answ += [line]
+        raw_answer += [line]
 
-        return answ
+        raw_answer_in_one_piece = b''
+        for line in raw_answer:
+            raw_answer_in_one_piece += line
+
+        return raw_answer_in_one_piece
+
+
+def decode_raw_answer(raw_answer):
+    """ get raw answer ans split it to header, body and checksum part """
+
+    # split message parts
+    header, b = raw_answer.split(STX)
+    body, checksum = b.split(ETX)
+
+    return header, body, checksum
+
+
+def test_checksum(body, checksum):
+    """ test checksum from message body """
+
+    if len(checksum) != 1:
+        return False
+
+    chsum = ord(ETX)
+    for b in body:
+        chsum ^= b
+
+    if chsum == checksum[0]:
+        return True
+
+    return False
 
 
 if __name__ == "__main__":
-    # test 'get_data' function
-    #answ = get_data(portname)
 
-    answ = get_data(portname)
-    print(split_data_block(join_listofbytes(answ)))
-
-    '''#test 'get_data_simple' function
-    answ = get_data_silent(portname)
-    for l in answ:
-        print(l.decode('ascii').strip())'''
+    print('Read tariff data. This usually takes about half minute.')
+    print()
+    raw = get_data_silent(portname)
+    header, body, checksum = decode_raw_answer(raw)
+    data_ok = test_checksum(body, checksum)
+    if data_ok:
+        print('  Header:')
+        print(header[1:].decode('ascii').strip())
+        print()
+        print('  Body:')
+        for line in body.decode('ascii').splitlines()[:-1]:
+            print(line.strip())
+        print()
+        print('  Checksum OK')
+    else:
+        print('Message ERROR. Sorry.')
