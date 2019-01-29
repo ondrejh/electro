@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import serial  # pySerial installation: sudo pip3 install pySerial
+from database import store_tariff_reading
 
 # portname = '/dev/ttyUSB0'
 # portname = '/dev/ttyS0'
@@ -189,19 +190,16 @@ def test_checksum(body, checksum):
 
 if __name__ == "__main__":
 
-    print('Read tariff data. This usually takes about half minute.')
-    print()
     raw = get_data_silent(portname)
     header, body, checksum = decode_raw_answer(raw)
     data_ok = test_checksum(body, checksum)
     if data_ok:
-        print('  Header:')
-        print(header[1:].decode('ascii').strip())
-        print()
-        print('  Body:')
-        for line in body.decode('ascii').splitlines()[:-1]:
-            print(line.strip())
-        print()
-        print('  Checksum OK')
-    else:
-        print('Message ERROR. Sorry.')
+        # header: omit leading '/' and decode and strip line endings
+        header_data = header[1:].decode('ascii').strip()
+        # body: decode, split to lines, strip all lines and omit tailing '!'
+        body_lines = body.decode('ascii').splitlines()
+        body_data = body_lines[0].strip()
+        for line in body_lines[1:-1]:
+            body_data += '\n' + line.strip()
+        # store the results to database
+        store_tariff_reading(header[1:].decode('ascii'), body_data)
