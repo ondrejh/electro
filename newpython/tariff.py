@@ -14,18 +14,6 @@ request_string = '/?!\x0D\x0A'
 STX = b'\x02'
 ETX = b'\x03'
 
-kwh_total_value_start_str = '1.8.0('
-kwh_value_end_str = '*kWh'
-
-
-def get_total_kwh(data_str):
-    ''' return total kwh value from input data '''
-
-    kwh = data_str[(data_str.find(kwh_total_value_start_str) + len(kwh_total_value_start_str)):]
-    kwh = kwh[:kwh.find(kwh_value_end_str)]
-
-    return (float(kwh))
-
 
 # obsolete functions
 '''def join_listofbytes(listof_bytes):

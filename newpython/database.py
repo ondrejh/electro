@@ -1,6 +1,7 @@
 #! /usr/bin/python3
 
 import sqlite3
+from utils import get_kwh_values
 
 #db_name = 'tariff.sql'
 db_name = '/home/pi/data/tariff.sql'
@@ -104,4 +105,5 @@ if __name__ == "__main__":
     data = dump_readings(db=db)
 
     for d in data:
-        print('{} {} {} {}'.format(d[0], d[3], d[1], len(d[2].splitlines())))
+        v = get_kwh_values(d[2])
+        print('{} {} {}'.format(d[0], d[3], '{:.03f} {:.03f} {:.03f}'.format(v[0], v[1], v[2])))
