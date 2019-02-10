@@ -60,8 +60,8 @@
                 //echo "</article></section></body></html>";
                 //exit();
             
-                $maxts_minus_2days = date("Y-m-d H:i", strtotime('-2 day', strtotime($maxts)));
-                $query = "SELECT timestamp, body FROM readings WHERE timestamp > '{$maxts_minus_2days}' ORDER BY timestamp";
+                $maxts_minus = date("Y-m-d H:i", strtotime('-3 day', strtotime($maxts)));
+                $query = "SELECT timestamp, body FROM readings WHERE timestamp > '{$maxts_minus}' ORDER BY timestamp";
                 $db_data = $db->query($query);
                 $entries = array();
                 while($row = $db_data->fetchArray()) {
@@ -70,21 +70,24 @@
                 }
                 $watage = array();
                 $first = true;
-                $t = 0.0;
+                $tT = 0.0;
                 $t1 = 0.0;
                 $t2 = 0.0;
+                $ts = "";
                 //echo "<p><table><tr><th>Time</th><th>Total [kWh]</th><th>Tariff 1 [kWh]</th><th>Tariff 2 [kWh]</th></tr>". PHP_EOL;
                 foreach ($entries as $e) {
                     if ($first) {
                         $first = false;
                     }
                     else {
-                        $w = $e[1] - $t;
-                        $w1 = $e[2] - $t1;
-                        $w2 = $e[3] - $t2;
-                        $watage[] = array($e[0], $w, $w1, $w2);
+                        $dt = (strtotime($e[0]) - strtotime($ts)) / 3600;
+                        $wT = ($e[1] - $tT) / $dt;
+                        $w1 = ($e[2] - $t1) / $dt;
+                        $w2 = ($e[3] - $t2) / $dt;
+                        $watage[] = array($e[0], $wT, $w1, $w2);
                     }
-                    $t = $e[1];
+                    $ts = $e[0];
+                    $tT = $e[1];
                     $t1 = $e[2];
                     $t2 = $e[3];
                     //echo "<tr><td>{$e[0]}</td><td>{$e[1]}</td><td>{$e[2]}</td><td>{$e[3]}</td></tr>". PHP_EOL;
@@ -96,16 +99,15 @@
             ?>
             
             <script>
-                var t1col = '#DDDDDD';
+                var t1col = '#555555';
                 var t2col = '#B21B04';
-                var t3col = '#2E4AA9';
+                var t3col = '#009933';
                 var trace1 = {
                     x: [<?php
                         $first = true;
                         foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
-                            #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
                             echo "'". $e[0]. "'";
                         }
                         ?>],
@@ -129,7 +131,6 @@
                         foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
-                            #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
                             echo "'". $e[0]. "'";
                         }
                         ?>],
@@ -153,7 +154,6 @@
                         foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
-                            #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
                             echo "'". $e[0]. "'";
                         }
                         ?>],
