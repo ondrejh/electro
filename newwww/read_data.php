@@ -31,16 +31,6 @@
             <div id='chart'></div>
 
             <?php
-                $db = new SQLite3("/home/pi/data/tariff.sql");
-                
-                $query = "SELECT MAX(timestamp) FROM readings";
-                $db_data = $db->query($query);
-                $maxts = $db_data->fetchArray()[0];
-                $query = "SELECT body FROM readings WHERE timestamp='{$maxts}'";//ORDER BY timestamp";
-                $db_data = $db->query($query);
-                $body = $db_data->fetchArray()[0];
-                //echo "<p>{$maxts}<br>{$body}</p>";
-            
                 function get_kwh($one_tariff_reading) {
                     $ar1 = explode("*kWh", explode("1.8.0(", $one_tariff_reading, 2)[1], 2);
                     $ar2 = explode("*kWh", explode("1.8.1(", $ar1[1], 2)[1], 2);
@@ -53,33 +43,36 @@
                     return array($tot_kwh, $t1_kwh, $t2_kwh);
                 }
             
+                $db = new SQLite3("/home/pi/data/tariff.sql");
+                
+                $query = "SELECT MAX(timestamp) FROM readings";
+                $db_data = $db->query($query);
+                $maxts = $db_data->fetchArray()[0];
+                $query = "SELECT body FROM readings WHERE timestamp='{$maxts}'";//ORDER BY timestamp";
+                $db_data = $db->query($query);
+                $body = $db_data->fetchArray()[0];
+                //echo "<p>{$maxts}<br>{$body}</p>";
+            
                 $p = get_kwh($body);
             
-                echo "<p>Total: {$p[0]} kWh<br>Tariff 1: {$p[1]} kWh<br>Tariff 2: {$p[2]} kWh</p>";
+                echo "<p>Total: {$p[0]} kWh<br>Tariff 1: {$p[1]} kWh<br>Tariff 2: {$p[2]} kWh</p>". PHP_EOL. PHP_EOL;
             
-                //$sp_body = explode("\n", $body);
-                //echo "<p>";
-                //foreach ($sp_body as $e) {
-                //    echo "{$e}<br>";
-                //}
-                //echo "</p>";
-
-                echo "</article></section></body></html>";
-                exit();
+                //echo "</article></section></body></html>";
+                //exit();
             
-                echo "<p>";
                 $query = "SELECT timestamp, body FROM readings ORDER BY timestamp";
                 $db_data = $db->query($query);
                 $entries = array();
-                echo "<p>";
                 while($row = $db_data->fetchArray()) {
-                    $entries[] = array($row['timestamp'], $row['body']);
-                    echo sprintf("%s<br>%s<br><br>", $row['timestamp'], $row['body']);
+                    $p = get_kwh($row['body']);
+                    $entries[] = array($row['timestamp'], $p[0], $p[1], $p[2]);
+                    #echo sprintf("%s %s %s %s\n<br>", $row['timestamp'], $row['body']);
                 }
-                echo "</p>";
-                #foreach ($entries as $e) {
-                #    echo $e[0]. " ". $e[1]. " ". $e[2]. "<br>\n";
-                #}
+                echo "<p><table><tr><th>Time</th><th>Total kWh</th><th>Tariff 1 kWh</th><th>Tariff 2 kWh</th></tr>". PHP_EOL;
+                foreach ($entries as $e) {
+                    echo "<tr><td>{$e[0]}</td><td>{$e[1]}</td><td>{$e[2]}</td><td>{$e[3]}</td></tr>". PHP_EOL;
+                }
+                echo "</table></p>";
                 echo "</article></section></body></html>";
                 exit();
             ?>
