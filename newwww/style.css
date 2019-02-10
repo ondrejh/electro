@@ -1,0 +1,183 @@
+*, 
+*:before, 
+*:after	{ -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	min-height: 100%;
+	font-family: 'Open Sans', Arial, sans-serif;
+	font-weight: 400;
+	font-size: 100%;
+	line-height: 1.667;
+	background-color: #f4f4f4;
+	text-align: center;
+	color: #444;
+}
+h1, h2 {
+	text-align: center;
+	margin: 0;
+	font-weight: 400;
+	font-size: 2.5em;
+	line-height: 1.2;
+	font-family: 'Oswald', Arial;
+	color: #212121;
+}
+h2 {
+	font-size: 2em;
+	margin: 30px 0;
+}
+p {
+	margin: 0 0 25px;
+	line-height: 1.667;
+}
+a {
+	text-decoration: underline;
+	color: #A61300;
+}
+a:hover,
+a:focus {
+	text-decoration: none;
+	color: #000;
+}
+
+
+/* hlavicka */
+header {
+	max-width: 1260px;
+	margin: 0 auto;
+	padding: 40px 12px;
+}
+
+
+/* hlavni cast */
+.content {
+	max-width: 1260px;
+	margin: 0 auto;
+	padding: 0 12px 40px;
+}
+.main {
+	margin-bottom: 70px;
+}
+
+article:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.left,
+.right {
+	margin: 0;
+	max-width: 49%;
+	float: left;
+}
+.right {
+	float: none;
+	margin: 0 auto;
+	max-width: 90%;
+}
+img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+	box-shadow: 0 0 5px rgba(0,0,0,0.25);
+	border-radius: 10px;
+	border: 3px solid #fff;
+}
+.desc {
+	display: block;
+	padding-top: 10px;
+}
+
+
+/* graf */
+.graph {
+	max-width: 800px;
+	margin: 0 auto 60px;
+}
+.graph__inner {
+	box-shadow: 0 0 5px rgba(0,0,0,0.25);
+	border-radius: 10px;
+	border: 3px solid #fff;
+}
+
+
+/* archiv fotek */
+.foto {
+	float: left;
+	width: 23%;
+	margin: 0 2.667% 2.667% 0;
+}
+.foto:nth-child(4n+1) {
+	margin-right: 0;
+}
+.name {
+	display: block;
+}
+
+
+/* paticka */
+footer {
+	max-width: 1260px;
+	margin: 0 auto;
+	padding: 0 12px 40px;
+	color: #666;
+	font-size: 14px;
+}
+footer p {
+	margin: 0 auto;
+	max-width: 700px;
+}
+footer p.toTop {
+	padding-top: 20px;
+	font-size: 1rem;
+}
+
+
+/* responze */
+@media only screen and (max-device-width: 767px) { 
+
+	.left,
+	.right {
+		float: none;
+		display: block;
+		margin: 0 auto 45px;
+		max-width: 100%;
+	}
+	.right {
+		margin-bottom: 0;
+	}
+	.foto {
+		width: 48%;
+		margin: 0 0 4%;
+	}
+	.foto:nth-child(odd) {
+		float: right;
+	}
+
+}
+
+/* hlaska pro stary prohlizec */
+.home .buorg {
+	font-size: 13px;
+	background-color: #fff5ae;
+	box-shadow: 0 0 5px rgba(0,0,0,0.35);
+}
+.home .buorg a {
+	color: #A61300;
+	text-decoration: underline;
+}
+.home .buorg a:hover,
+.home .buorg a:focus {
+	color: #000;
+	text-decoration: none;
+}
+.home #buorgclose {
+	font-size: 23px;
+}
+.home #buorgclose:hover,
+.home #buorgclose:focus {
+	color: #A61300;
+}
