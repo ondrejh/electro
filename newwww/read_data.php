@@ -33,16 +33,39 @@
             <?php
                 $db = new SQLite3("/home/pi/data/tariff.sql");
                 
-                //$query = "SELECT MAX(timestamp) FROM readings";
-                //$db_data = $db->query($query);
-                //$maxts = $db_data->fetchArray()[0];
-                //$query = "SELECT body FROM readings WHERE timestamp='{$maxts}'";//ORDER BY timestamp";
-                //$db_data = $db->query($query);
-                //$last_body = $db_data->fetchArray()[0];
-                //echo "<p>{$maxts}<br>{$last_body}</p>";
+                $query = "SELECT MAX(timestamp) FROM readings";
+                $db_data = $db->query($query);
+                $maxts = $db_data->fetchArray()[0];
+                $query = "SELECT body FROM readings WHERE timestamp='{$maxts}'";//ORDER BY timestamp";
+                $db_data = $db->query($query);
+                $body = $db_data->fetchArray()[0];
+                //echo "<p>{$maxts}<br>{$body}</p>";
+            
+                function get_kwh($one_tariff_reading) {
+                    $ar1 = explode("*kWh", explode("1.8.0(", $one_tariff_reading, 2)[1], 2);
+                    $ar2 = explode("*kWh", explode("1.8.1(", $ar1[1], 2)[1], 2);
+                    $ar3 = explode("*kWh", explode("1.8.2(", $ar2[1], 2)[1], 2);
+                    
+                    $tot_kwh = $ar1[0];
+                    $t1_kwh = $ar2[0];
+                    $t2_kwh = $ar3[0];
+                    
+                    return array($tot_kwh, $t1_kwh, $t2_kwh);
+                }
+            
+                $p = get_kwh($body);
+            
+                echo "<p>Total: {$p[0]} kWh<br>Tariff 1: {$p[1]} kWh<br>Tariff 2: {$p[2]} kWh</p>";
+            
+                //$sp_body = explode("\n", $body);
+                //echo "<p>";
+                //foreach ($sp_body as $e) {
+                //    echo "{$e}<br>";
+                //}
+                //echo "</p>";
 
-                //echo "</article></section></body></html>";
-                //exit();
+                echo "</article></section></body></html>";
+                exit();
             
                 echo "<p>";
                 $query = "SELECT timestamp, body FROM readings ORDER BY timestamp";
