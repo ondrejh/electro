@@ -30,7 +30,7 @@
         <article class="main">
             <div id='chart'></div>
 
-            <?php
+            <?php // get data
                 function get_kwh($one_tariff_reading) {
                     $ar1 = explode("*kWh", explode("1.8.0(", $one_tariff_reading, 2)[1], 2);
                     $ar2 = explode("*kWh", explode("1.8.1(", $ar1[1], 2)[1], 2);
@@ -55,35 +55,54 @@
             
                 $p = get_kwh($body);
             
-                echo "<p>Total: {$p[0]} kWh<br>Tariff 1: {$p[1]} kWh<br>Tariff 2: {$p[2]} kWh</p>". PHP_EOL. PHP_EOL;
+                //echo "<p>Total: {$p[0]} kWh<br>Tariff 1: {$p[1]} kWh<br>Tariff 2: {$p[2]} kWh</p>". PHP_EOL. PHP_EOL;
             
                 //echo "</article></section></body></html>";
                 //exit();
             
-                $query = "SELECT timestamp, body FROM readings ORDER BY timestamp";
+                $maxts_minus_2days = date("Y-m-d H:i", strtotime('-2 day', strtotime($maxts)));
+                $query = "SELECT timestamp, body FROM readings WHERE timestamp > '{$maxts_minus_2days}' ORDER BY timestamp";
                 $db_data = $db->query($query);
                 $entries = array();
                 while($row = $db_data->fetchArray()) {
                     $p = get_kwh($row['body']);
-                    $entries[] = array($row['timestamp'], $p[0], $p[1], $p[2]);
-                    #echo sprintf("%s %s %s %s\n<br>", $row['timestamp'], $row['body']);
+                    $entries[] = array(date("Y-m-d H:i", strtotime($row['timestamp'])), floatval($p[0]), floatval($p[1]), floatval($p[2]));
                 }
-                echo "<p><table><tr><th>Time</th><th>Total kWh</th><th>Tariff 1 kWh</th><th>Tariff 2 kWh</th></tr>". PHP_EOL;
+                $watage = array();
+                $first = true;
+                $t = 0.0;
+                $t1 = 0.0;
+                $t2 = 0.0;
+                //echo "<p><table><tr><th>Time</th><th>Total [kWh]</th><th>Tariff 1 [kWh]</th><th>Tariff 2 [kWh]</th></tr>". PHP_EOL;
                 foreach ($entries as $e) {
-                    echo "<tr><td>{$e[0]}</td><td>{$e[1]}</td><td>{$e[2]}</td><td>{$e[3]}</td></tr>". PHP_EOL;
+                    if ($first) {
+                        $first = false;
+                    }
+                    else {
+                        $w = $e[1] - $t;
+                        $w1 = $e[2] - $t1;
+                        $w2 = $e[3] - $t2;
+                        $watage[] = array($e[0], $w, $w1, $w2);
+                    }
+                    $t = $e[1];
+                    $t1 = $e[2];
+                    $t2 = $e[3];
+                    //echo "<tr><td>{$e[0]}</td><td>{$e[1]}</td><td>{$e[2]}</td><td>{$e[3]}</td></tr>". PHP_EOL;
                 }
-                echo "</table></p>";
-                echo "</article></section></body></html>";
-                exit();
+                //echo "</table></p>";
+                
+                //echo "</article></section></body></html>";
+                //exit();
             ?>
             
             <script>
-                var t1col = '#B21B04';
-                var t2col = '#2E4AA9';
+                var t1col = '#DDDDDD';
+                var t2col = '#B21B04';
+                var t3col = '#2E4AA9';
                 var trace1 = {
                     x: [<?php
                         $first = true;
-                        foreach ($entries as $e) {
+                        foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
                             #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
@@ -92,13 +111,13 @@
                         ?>],
                     y: [<?php
                         $first = true;
-                        foreach ($entries as $e) {
+                        foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
-                            echo round($e[1],1);
+                            echo $e[1];
                         }
                         ?>],
-                    name: 'teplota [°C]',
+                    name: 'Celkem [kW]',
                     type: 'scatter',
                     line: {
                         color: t1col
@@ -107,7 +126,7 @@
                 var trace2 = {
                     x: [<?php
                         $first = true;
-                        foreach ($entries as $e) {
+                        foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
                             #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
@@ -116,32 +135,46 @@
                         ?>],
                     y: [<?php
                         $first = true;
-                        foreach ($entries as $e) {
+                        foreach ($watage as $e) {
                             if ($first) $first = false;
                             else echo ', ';
-                            echo round($e[2],1);
+                            echo $e[2];
                         }
                         ?>],
-                    name: 'vlhkost [%]',
-                    yaxis: 'y2',
+                    name: 'Drahý [kW]',
                     type: 'scatter',
                     line: {
                         color: t2col
                     }
                 };
-                var data = [trace1, trace2];
+                var trace3 = {
+                    x: [<?php
+                        $first = true;
+                        foreach ($watage as $e) {
+                            if ($first) $first = false;
+                            else echo ', ';
+                            #echo "'". date('Y-m-d H:i:s', strtotime($e[0])). "'";
+                            echo "'". $e[0]. "'";
+                        }
+                        ?>],
+                    y: [<?php
+                        $first = true;
+                        foreach ($watage as $e) {
+                            if ($first) $first = false;
+                            else echo ', ';
+                            echo $e[3];
+                        }
+                        ?>],
+                    name: 'Levný [kW]',
+                    type: 'scatter',
+                    line: {
+                        color: t3col
+                    }
+                };
+                var data = [trace1, trace2, trace3];
                 var layout = {
                     yaxis: {
-                        title: 'teplota [°C]',
-                        titlefont: {color: t1col},
-                        tickfont: {color: t1col}
-                    },
-                    yaxis2: {
-                        title: 'vlhkost [%]',
-                        titlefont: {color: t2col},
-                        tickfont: {color: t2col},
-                        overlaying: 'y',
-                        side: 'right'
+                        title: 'Příkon [kW]'
                     },
                     margin: { t: 0},
                     showlegend: false
