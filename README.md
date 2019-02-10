@@ -1,13 +1,23 @@
-electro
+Electro
 =======
 
-Tariff device logging according to IEC 62056-21
+Tariff device logging according to IEC 62056-21.
 
-electro.py: script fetching data from tariff device (two function versions)
-test_data.py: sample data fetched with the first prototype of the optical head
+## Description:
+The device is based on Raspberry PI, with the optical head connected to it. It reads the tariff values every 15 minutes and saves it into the database file. The device has the web interface displayin the captured data in chart.
+
+## Files:
+[tariff.py](https://github.com/ondrejh/electro/blob/master/script/tariff.py): access tariff device and store reading into sqlite database file.
 
 doc: some resouces
 
 hw: optical head documentation
 
-todo: improve database structure in newpython
+## Instalation:
+will be done later
+
+## ToDo:
+- calculate time of the high-low tariff switching
+- display it
+- some more description (schematics, head documentation, photos ...)
+
