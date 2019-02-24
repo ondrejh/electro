@@ -80,10 +80,12 @@
                 $watLcnt = -1;
                 $watH = array();
                 $watL = array();
-                $lw1 = 0.0;
-                $lw2 = 0.0;
+                $changes = array();
                 $tarif = 'none';
                 $cnt = 0;
+                $lw = 0.0;
+                $lw1 = 0.0;
+                $lw2 = 0.0;
                 //echo "<p><table><tr><th>Time</th><th>Total [kWh]</th><th>Tariff 1 [kWh]</th><th>Tariff 2 [kWh]</th></tr>". PHP_EOL;
                 foreach ($entries as $e) {
                     if ($first) {
@@ -101,7 +103,17 @@
                                 $tarif = 'high';
                                 $watHcnt += 1;
                                 $watH[] = array();
-                                $cnt = 0;
+                                $pt = $dt / ($e[1] - $tT) * ($e[2] - $t1);
+                                #echo $pt. " = ". $dt. " / (". $e[1]. " - ". $tT. ") * (". $e[2]. " - ". $t1. ")<br>";
+                                $t = date("Y-m-d H:i", strtotime("+". round($pt*3600). " seconds", strtotime($ts)));
+                                #echo $t. " = ". $ts. " + ". $pt. "h<br>";
+                                $w = $lw + ($wT - $lw) / $dt * $pt;
+                                $changes[] = array($t, $w);
+                                #echo $pt. " .. ". $t. " .. ". $w. "<br>";
+                                if ($watLcnt >= 0)
+                                    $watL[$watLcnt][$cnt] = array($t, $w);
+                                $watH[$watHcnt][0] = array($t, $w);
+                                $cnt = 1;
                             }
                         }
                         else if (($lw2 == 0.0) && ($w2 != 0.0)) {
@@ -109,7 +121,16 @@
                                 $tarif = 'low';
                                 $watLcnt += 1;
                                 $watL[] = array();
-                                $cnt = 0;
+                                $pt = $dt / ($e[1] - $tT) * ($e[3] - $t2);
+                                #echo $pt. " = ". $dt. " / (". $e[1]. " - ". $tT. ") * (". $e[3]. " - ". $t2. ")<br>";
+                                $t = date("Y-m-d H:i", strtotime("+". round($pt*3600). " seconds", strtotime($ts)));
+                                $w = $lw + ($wT - $lw) / $dt * $pt;
+                                $changes[] = array($t, $w);
+                                #echo $t. " .. ". $w. "<br>";
+                                if ($watHcnt >= 0)
+                                    $watH[$watHcnt][$cnt] = array($t, $w);
+                                $watL[$watLcnt][0] = array($t, $w);
+                                $cnt = 1;
                             }
                         }
                         
@@ -122,6 +143,7 @@
                             $cnt += 1;
                         }
                         
+                        $lw = $wT;
                         $lw1 = $w1;
                         $lw2 = $w2;
                     }
@@ -224,20 +246,10 @@
         
         <article class="main">
             <div id='chart2'></div>
-            <p>
-            <?php
-            echo "Vysoky:<br>";
-            foreach ($watH as $w) {
-                var_dump($w);
-            }
-            echo "Nizky:<br>";
-            foreach ($watL as $w) {
-                var_dump($w);
-            }
-            ?></p>
             <script>
                 var tHcol = '#B21B04';
                 var tLcol = '#009933';
+                var tCcol = '#3333ff';
                 <?php
                 $cnt = 0;
                 foreach ($watH as $w) {
@@ -277,6 +289,21 @@
                     }
                     echo "], name: 'Levný [kW]', type: 'scatter', mode: 'lines', line: {color: tLcol}};". PHP_EOL;
                 };
+                #echo "var tC = {x: [";
+                #$first = true;
+                #foreach ($changes as $c) {
+                #    if ($first) $first = false;
+                #    else echo ', ';
+                #    echo "'". $c[0]. "'";
+                #}
+                #echo "], y: [";
+                #$first = true;
+                #foreach ($changes as $c) {
+                #    if ($first) $first = false;
+                #    else echo ', ';
+                #    echo $c[1];
+                #}
+                #echo "], name: 'Změny [kW]', type: 'scatter', mode: 'markers', line: {color: tCcol}};". PHP_EOL;
                 echo "var data = [";
                 $cnt = 0;
                 foreach ($watH as $w) {
@@ -290,6 +317,7 @@
                     $cnt += 1;
                 }
                 echo "];". PHP_EOL;
+                #echo ", tC];". PHP_EOL;
                 ?>
                 var layout = {
                     yaxis: {
