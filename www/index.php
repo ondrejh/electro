@@ -160,93 +160,6 @@
             ?>
             
             <script>
-                var t1col = '#555555';
-                var t2col = '#B21B04';
-                var t3col = '#009933';
-                var trace1 = {
-                    x: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo "'". $e[0]. "'";
-                        }
-                        ?>],
-                    y: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo $e[1];
-                        }
-                        ?>],
-                    name: 'Celkem [kW]',
-                    type: 'scatter',
-                    line: {
-                        color: t1col
-                    }
-                };
-                var trace2 = {
-                    x: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo "'". $e[0]. "'";
-                        }
-                        ?>],
-                    y: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo $e[2];
-                        }
-                        ?>],
-                    name: 'Drahý [kW]',
-                    type: 'scatter',
-                    line: {
-                        color: t2col
-                    }
-                };
-                var trace3 = {
-                    x: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo "'". $e[0]. "'";
-                        }
-                        ?>],
-                    y: [<?php
-                        $first = true;
-                        foreach ($watage as $e) {
-                            if ($first) $first = false;
-                            else echo ', ';
-                            echo $e[3];
-                        }
-                        ?>],
-                    name: 'Levný [kW]',
-                    type: 'scatter',
-                    line: {
-                        color: t3col
-                    }
-                };
-                var data = [trace1, trace2, trace3];
-                var layout = {
-                    yaxis: {
-                        title: 'Příkon [kW]'
-                    },
-                    margin: { t: 0},
-                    showlegend: false
-                };
-                Plotly.newPlot('chart', data, layout);
-            </script>
-        </article>
-        
-        <article class="main">
-            <div id='chart2'></div>
-            <script>
                 var tHcol = '#B21B04';
                 var tLcol = '#009933';
                 var tCcol = '#3333ff';
@@ -268,7 +181,7 @@
                         else echo ', ';
                         echo $e[1];
                     }
-                    echo "], name: 'Drahý [kW]', type: 'scatter', mode: 'lines', line: {color: tHcol}};". PHP_EOL;
+                    echo "], name: 'Drahý [kW]', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: {color: tHcol}};". PHP_EOL;
                 };
                 $cnt = 0;
                 foreach ($watL as $w) {
@@ -287,23 +200,23 @@
                         else echo ', ';
                         echo $e[1];
                     }
-                    echo "], name: 'Levný [kW]', type: 'scatter', mode: 'lines', line: {color: tLcol}};". PHP_EOL;
+                    echo "], name: 'Levný [kW]', type: 'scatter', mode: 'lines', fill: 'tozeroy', line: {color: tLcol}};". PHP_EOL;
                 };
-                #echo "var tC = {x: [";
-                #$first = true;
-                #foreach ($changes as $c) {
-                #    if ($first) $first = false;
-                #    else echo ', ';
-                #    echo "'". $c[0]. "'";
-                #}
-                #echo "], y: [";
-                #$first = true;
-                #foreach ($changes as $c) {
-                #    if ($first) $first = false;
-                #    else echo ', ';
-                #    echo $c[1];
-                #}
-                #echo "], name: 'Změny [kW]', type: 'scatter', mode: 'markers', line: {color: tCcol}};". PHP_EOL;
+                echo "var tC = {x: [";
+                $first = true;
+                foreach ($changes as $c) {
+                    if ($first) $first = false;
+                    else echo ', ';
+                    echo "'". $c[0]. "'";
+                }
+                echo "], y: [";
+                $first = true;
+                foreach ($changes as $c) {
+                    if ($first) $first = false;
+                    else echo ', ';
+                    echo $c[1];
+                }
+                echo "], name: 'Změny [kW]', type: 'scatter', mode: 'markers', line: {color: tCcol}};". PHP_EOL;
                 echo "var data = [";
                 $cnt = 0;
                 foreach ($watH as $w) {
@@ -326,7 +239,7 @@
                     margin: { t: 0},
                     showlegend: false
                 };
-                Plotly.newPlot('chart2', data, layout);
+                Plotly.newPlot('chart', data, layout);
             </script>
         </article>
     </section>
