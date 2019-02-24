@@ -74,6 +74,16 @@
                 $t1 = 0.0;
                 $t2 = 0.0;
                 $ts = "";
+
+                #$watL = array();
+                $watHcnt = -1;
+                $watLcnt = -1;
+                $watH = array();
+                $watL = array();
+                $lw1 = 0.0;
+                $lw2 = 0.0;
+                $tarif = 'none';
+                $cnt = 0;
                 //echo "<p><table><tr><th>Time</th><th>Total [kWh]</th><th>Tariff 1 [kWh]</th><th>Tariff 2 [kWh]</th></tr>". PHP_EOL;
                 foreach ($entries as $e) {
                     if ($first) {
@@ -85,6 +95,35 @@
                         $w1 = ($e[2] - $t1) / $dt;
                         $w2 = ($e[3] - $t2) / $dt;
                         $watage[] = array($e[0], $wT, $w1, $w2);
+                        
+                        if (($lw1 == 0.0) && ($w1 != 0.0)) {
+                            if ($tarif != 'high') {
+                                $tarif = 'high';
+                                $watHcnt += 1;
+                                $watH[] = array();
+                                $cnt = 0;
+                            }
+                        }
+                        else if (($lw2 == 0.0) && ($w2 != 0.0)) {
+                            if ($tarif != 'low') {
+                                $tarif = 'low';
+                                $watLcnt += 1;
+                                $watL[] = array();
+                                $cnt = 0;
+                            }
+                        }
+                        
+                        if ($tarif === 'high') {
+                            $watH[$watHcnt][$cnt] = array($e[0], $wT);
+                            $cnt += 1;
+                        }
+                        else if ($tarif === 'low') {
+                            $watL[$watLcnt][$cnt] = array($e[0], $wT);
+                            $cnt += 1;
+                        }
+                        
+                        $lw1 = $w1;
+                        $lw2 = $w2;
                     }
                     $ts = $e[0];
                     $tT = $e[1];
@@ -182,7 +221,86 @@
                 Plotly.newPlot('chart', data, layout);
             </script>
         </article>
-
+        
+        <article class="main">
+            <div id='chart2'></div>
+            <p>
+            <?php
+            echo "Vysoky:<br>";
+            foreach ($watH as $w) {
+                var_dump($w);
+            }
+            echo "Nizky:<br>";
+            foreach ($watL as $w) {
+                var_dump($w);
+            }
+            ?></p>
+            <script>
+                var tHcol = '#B21B04';
+                var tLcol = '#009933';
+                <?php
+                $cnt = 0;
+                foreach ($watH as $w) {
+                    echo "var tH". $cnt. " = {x: [";
+                    $cnt += 1;
+                    $first = true;
+                    foreach ($w as $e) {
+                        if ($first) $first = false;
+                        else echo ', ';
+                        echo "'". $e[0]. "'";
+                    }
+                    echo "], y: [";
+                    $first = true;
+                    foreach ($w as $e) {
+                        if ($first) $first = false;
+                        else echo ', ';
+                        echo $e[1];
+                    }
+                    echo "], name: 'Drahý [kW]', type: 'scatter', mode: 'lines', line: {color: tHcol}};". PHP_EOL;
+                };
+                $cnt = 0;
+                foreach ($watL as $w) {
+                    echo "var tL". $cnt. " = {x: [";
+                    $cnt += 1;
+                    $first = true;
+                    foreach ($w as $e) {
+                        if ($first) $first = false;
+                        else echo ', ';
+                        echo "'". $e[0]. "'";
+                    }
+                    echo "], y: [";
+                    $first = true;
+                    foreach ($w as $e) {
+                        if ($first) $first = false;
+                        else echo ', ';
+                        echo $e[1];
+                    }
+                    echo "], name: 'Levný [kW]', type: 'scatter', mode: 'lines', line: {color: tLcol}};". PHP_EOL;
+                };
+                echo "var data = [";
+                $cnt = 0;
+                foreach ($watH as $w) {
+                    if ($cnt) echo ", ";
+                    echo "tH". $cnt;
+                    $cnt += 1;
+                }
+                $cnt = 0;
+                foreach ($watL as $w) {
+                    echo ", tL". $cnt;
+                    $cnt += 1;
+                }
+                echo "];". PHP_EOL;
+                ?>
+                var layout = {
+                    yaxis: {
+                        title: 'Příkon [kW]'
+                    },
+                    margin: { t: 0},
+                    showlegend: false
+                };
+                Plotly.newPlot('chart2', data, layout);
+            </script>
+        </article>
     </section>
 </body>
 </html>
