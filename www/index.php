@@ -107,7 +107,7 @@
                                 #echo $pt. " = ". $dt. " / (". $e[1]. " - ". $tT. ") * (". $e[2]. " - ". $t1. ")<br>";
                                 $t = date("Y-m-d H:i", strtotime("+". round($pt*3600). " seconds", strtotime($ts)));
                                 #echo $t. " = ". $ts. " + ". $pt. "h<br>";
-                                $w = $lw + ($wT - $lw) / $dt * $pt;
+                                $w = round($lw + ($wT - $lw) / $dt * $pt, 3);
                                 $changes[] = array($t, $w);
                                 #echo $pt. " .. ". $t. " .. ". $w. "<br>";
                                 if ($watLcnt >= 0)
@@ -124,7 +124,7 @@
                                 $pt = $dt / ($e[1] - $tT) * ($e[3] - $t2);
                                 #echo $pt. " = ". $dt. " / (". $e[1]. " - ". $tT. ") * (". $e[3]. " - ". $t2. ")<br>";
                                 $t = date("Y-m-d H:i", strtotime("+". round($pt*3600). " seconds", strtotime($ts)));
-                                $w = $lw + ($wT - $lw) / $dt * $pt;
+                                $w = round($lw + ($wT - $lw) / $dt * $pt, 3);
                                 $changes[] = array($t, $w);
                                 #echo $t. " .. ". $w. "<br>";
                                 if ($watHcnt >= 0)
