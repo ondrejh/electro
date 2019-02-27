@@ -135,6 +135,10 @@ footer p.toTop {
 	font-size: 1rem;
 }
 
+table, tbody, tr {
+    width: 100%;
+    text-align: center;
+}
 
 /* responze */
 @media only screen and (max-device-width: 767px) { 

@@ -12,7 +12,7 @@
     <meta name="description" content="Zobrazení dat z elektroměru." />
     <meta name="keywords" content="elektroměr" />
 
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.0.0/normalize.min.css" media="screen, print" />
+    <!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.0.0/normalize.min.css" media="screen, print" />-->
     <link rel="stylesheet" type="text/css" href="style.css" media="screen, print" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic|Oswald&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="favicon.ico" />
@@ -28,13 +28,16 @@
     <section class="content">
 
         <article class="main">
-            <h2>Poslední odečet</h2>
-            <p>
-            <div id='last_reading_timestamp'>1.1.1111 22:22</div>
-            T1:<div id='last_reading_t1'>0.000</div>kWh
-            T2:<div id='last_reading_t2'>0.000</div>kWh
-            Celkem:<div id='last_reading_ttot'>0.000</div>kWh </p>
-            <h2>Spotřeba energie za poslední 3 dny</h2>
+            <h2>Poslední odečet <span id='last_reading_timestamp'>1.1.1111 22:22</span></h2>
+            <table>
+                <tr><th>Celkem</th><th>Drahý tarif</th><th>Levný tarif</th></tr>
+                <tr><td><span id='last_reading_ttot'>0.000</span> kWh</td>
+                    <td><span id='last_reading_t2'>0.000</span> kWh</td>
+                    <td><span id='last_reading_t1'>0.000</span> kWh</td>
+                </tr>
+            </table>
+            
+            <h2>Spotřeba energie za poslední týden</h2>
             <div id='chart'></div>
 
             <?php // get data php section
@@ -61,7 +64,7 @@
 
             $lastp = get_kwh($body);
 
-            $maxts_minus = date("Y-m-d H:i", strtotime('-3 day', strtotime($maxts)));
+            $maxts_minus = date("Y-m-d H:i", strtotime('-7 day', strtotime($maxts)));
             $query = "SELECT timestamp, body FROM readings WHERE timestamp > '{$maxts_minus}' ORDER BY timestamp";
             $db_data = $db->query($query);
             $entries = array();
