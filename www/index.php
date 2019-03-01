@@ -28,7 +28,7 @@
     <section class="content">
 
         <article class="main">
-            <h2>Poslední odečet <span id='last_reading_timestamp'>1.1.1111 22:22</span></h2>
+            <h2>Aktuální odečet <span id='last_reading_timestamp'>1.1.1111 ve 22:22</span></h2>
             <table>
                 <tr><th>Celkem</th><th>Drahý tarif</th><th>Levný tarif</th></tr>
                 <tr><td><span id='last_reading_ttot'>0.000</span> kWh</td>
@@ -37,7 +37,7 @@
                 </tr>
             </table>
             
-            <h2>Spotřeba energie za poslední týden</h2>
+            <h2>Spotřeba energie za týden</h2>
             <div id='chart'></div>
 
             <?php // get data php section
@@ -168,7 +168,7 @@
             /* end of get data php */ ?>
         
             <script>
-                document.getElementById("last_reading_timestamp").innerText = <?php echo "'". $maxts. "'"; ?>;
+                document.getElementById("last_reading_timestamp").innerText = <?php echo "'". date('j.n.Y', strtotime($maxts)). " v ". date('G:i', strtotime($maxts)). "'"; ?>;
                 document.getElementById("last_reading_t1").innerText = <?php echo "'". round($lastp[1], 3). "'"; ?>;
                 document.getElementById("last_reading_t2").innerText = <?php echo "'". round($lastp[2], 3). "'"; ?>;
                 document.getElementById("last_reading_ttot").innerText = <?php echo "'". round($lastp[0], 3). "'"; ?>;
